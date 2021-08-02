@@ -83,14 +83,14 @@ output('94k50hp',10,'Ceramic')
 output('60k50hp',10,'Ceramic').to_dict()
 
 
-# In[5]:
+# In[ ]:
 
 
 #UKCountries = FF.create_table(output('60k50hp',10,'Ceramic'))
 #pyo.iplot(UKCountries)
 
 
-# In[6]:
+# In[5]:
 
 
 
@@ -105,7 +105,7 @@ op_start=[{'label' : a, 'value': a} for a in sojae_list ]
 op_start
 
 
-# In[7]:
+# In[6]:
 
 
 
@@ -116,7 +116,7 @@ thick_dic2=[{'label' : str(a)+'mm','value': str(a)} for a in thick_list2]
 thick_dic1
 
 
-# In[8]:
+# In[7]:
 
 
 thick_dic3=[
@@ -130,25 +130,25 @@ thick_dic3=[
 thick_dic3
 
 
-# In[9]:
+# In[8]:
 
 
 type(thick_dic1),type(thick_dic3),len(thick_dic1),len(thick_dic3)
 
 
-# In[10]:
+# In[9]:
 
 
 (thick_dic1[0].keys()),(thick_dic3[0].keys())
 
 
-# In[11]:
+# In[10]:
 
 
 thick_dic1[0].keys()==thick_dic3[0].keys()
 
 
-# In[67]:
+# In[11]:
 
 
 model_list=['60k50hp','94k50hp','94k100hp']
@@ -157,31 +157,35 @@ model_dic=[{'label' : model_label_list[a], 'value':model_list[a] } for a in rang
 model_dic
 
 
+# In[12]:
+
+
+def delete_comma(x):
+    return x.replace(',','')
+
+
+# In[22]:
+
+
+a=1497.85
+b=2152.25
+
+(b-a)/a
+
+
 # In[ ]:
 
 
+(df3.iloc[:,2]-df3.iloc[:,1])
 
 
-
-# In[24]:
-
-
-df1=output('60k50hp',10,'Ceramic')
-df2=output('94k50hp',10,'Ceramic')
-
-df3=pd.concat([df1,df2],axis=1)
-df3=df3.iloc[:,[0,1,3]]
-df3.columns=['Quality','hi1','hi2']
-df3
+# In[ ]:
 
 
-# In[25]:
+(df3.iloc[:,2]==df3.iloc[:,1]).values
 
 
-
-
-
-# In[70]:
+# In[23]:
 
 
 app = dash.Dash()
@@ -449,8 +453,20 @@ def update_output(n_clicks, sojae, thick,model1,model2):
 
         df3=pd.concat([df1,df2],axis=1)
         df3=df3.iloc[:,[0,1,3]]
-        df3.columns=['Quality',model1,model2]
-
+        df3.columns=['Quality',model1,model2]        
+        df3.iloc[:,2]=df3.iloc[:,2].apply(delete_comma)
+        df3.iloc[:,1]=df3.iloc[:,1].apply(delete_comma)
+        df3.iloc[:,1]=pd.to_numeric(df3.iloc[:,1])
+        df3.iloc[:,2]=pd.to_numeric(df3.iloc[:,2])
+        print((df3.iloc[:,2]==df3.iloc[:,1]).values)
+        if model1==model2:
+            list3=[0,0,0,0,0]
+        else:
+            list3=round((df3.iloc[:,2]-df3.iloc[:,1])/df3.iloc[:,1]*100,2)
+        df3['speed %']=list3
+        df3       
+        print(df3)        
+        
         return html.Div(
             [
                 dash_table.DataTable(
