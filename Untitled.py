@@ -86,8 +86,8 @@ output('60k50hp',10,'Ceramic').to_dict()
 # In[5]:
 
 
-UKCountries = FF.create_table(output('60k50hp',10,'Ceramic'))
-pyo.iplot(UKCountries)
+#UKCountries = FF.create_table(output('60k50hp',10,'Ceramic'))
+#pyo.iplot(UKCountries)
 
 
 # In[6]:
@@ -148,11 +148,19 @@ type(thick_dic1),type(thick_dic3),len(thick_dic1),len(thick_dic3)
 thick_dic1[0].keys()==thick_dic3[0].keys()
 
 
-# In[12]:
+# In[67]:
 
 
 model_list=['60k50hp','94k50hp','94k100hp']
-model_dic=[{'label' : a, 'value':a } for a in model_list]
+model_label_list=['UltraJet is','HyperJet is','HyperJet id']
+model_dic=[{'label' : model_label_list[a], 'value':model_list[a] } for a in range(0,3)]
+model_dic
+
+
+# In[ ]:
+
+
+
 
 
 # In[24]:
@@ -173,7 +181,7 @@ df3
 
 
 
-# In[44]:
+# In[70]:
 
 
 app = dash.Dash()
@@ -238,39 +246,61 @@ app.layout = html.Div([html.Div([html.H1('Flow waterjet cutting feed rate calcul
                        
     html.Div([
         html.Div([
-                html.H3('사양')],style={'display':'inline-block', 'margin-right': '15px'}),
+                html.H4('사양')],style={'display':'inline-block', 'margin-right': '15px'}),
         html.Div([
                 html.H3('사양1',id='spec_1')],style={'display':'inline-block', 'margin-right': '15px'}),
         html.Div([
-                html.H3('사양')],style={'display':'inline-block', 'margin-right': '15px'}),        
+                html.H4('사양')],style={'display':'inline-block', 'margin-right': '15px'}),        
         html.Div([
                 html.H3('사양2',id='spec_2')],style={'display':'inline-block', 'margin-right': '15px'})
       
             ]) ,
     html.Div([
         html.Div([
-                html.H3('노즐 in')],style={'display':'inline-block', 'margin-right': '15px'}),
+                html.H4('노즐 in')],style={'display':'inline-block', 'margin-right': '15px'}),
         html.Div([
-                html.H3('노즐1',id='nozle_1')],style={'display':'inline-block', 'margin-right': '15px'}),
+                html.H3('',id='nozle_1')],style={'display':'inline-block', 'margin-right': '15px'}),
         html.Div([
-                html.H3('노즐 in')],style={'display':'inline-block', 'margin-right': '15px'}),        
+                html.H4('노즐 in')],style={'display':'inline-block', 'margin-right': '15px'}),        
         html.Div([
-                html.H3('노즐2',id='nozle_2')],style={'display':'inline-block', 'margin-right': '15px'})
+                html.H3('',id='nozle_2')],style={'display':'inline-block', 'margin-right': '15px'})
       
             ]) ,
     html.Div([
         html.Div([
-                html.H3('오리피스 mm')],style={'display':'inline-block', 'margin-right': '15px'}),
+                html.H4('오리피스 mm')],style={'display':'inline-block', 'margin-right': '15px'}),
         html.Div([
-                html.H3('오리피스1',id='op_1')],style={'display':'inline-block', 'margin-right': '15px'}),
+                html.H3('',id='op_1')],style={'display':'inline-block', 'margin-right': '15px'}),
         html.Div([
-                html.H3('오리피스 mm')],style={'display':'inline-block', 'margin-right': '15px'}),        
+                html.H4('오리피스 mm')],style={'display':'inline-block', 'margin-right': '15px'}),        
         html.Div([
-                html.H3('오리피스2',id='op_2')],style={'display':'inline-block', 'margin-right': '15px'})
+                html.H3('',id='op_2')],style={'display':'inline-block', 'margin-right': '15px'})
+      
+            ]) ,   
+    html.Div([
+        html.Div([
+                html.H4('작동 압력 psi')],style={'display':'inline-block', 'margin-right': '15px'}),
+        html.Div([
+                html.H3('',id='psi_1')],style={'display':'inline-block', 'margin-right': '15px'}),
+        html.Div([
+                html.H4('작동 압력 psi')],style={'display':'inline-block', 'margin-right': '15px'}),        
+        html.Div([
+                html.H3('',id='psi_2')],style={'display':'inline-block', 'margin-right': '15px'})
+      
+            ]) ,
+    html.Div([
+        html.Div([
+                html.H4('연마재 g/min')],style={'display':'inline-block', 'margin-right': '15px'}),
+        html.Div([
+                html.H3('',id='gmin_1')],style={'display':'inline-block', 'margin-right': '15px'}),
+        html.Div([
+                html.H4('연마재 g/min')],style={'display':'inline-block', 'margin-right': '15px'}),        
+        html.Div([
+                html.H3('',id='gmin_2')],style={'display':'inline-block', 'margin-right': '15px'})
       
             ]) ,                       
     html.Div([
-                html.H5('[단위 mm/min]')],style={'display':'inline-block', 'margin-right': '15px'}),
+                html.H5('[단위 mm/min]')],style={'display':'inline-block', 'margin-left': '10%'}),
 
     html.Div([html.Div(id="update-table")]),                         
                     
@@ -280,20 +310,21 @@ app.layout = html.Div([html.Div([html.H1('Flow waterjet cutting feed rate calcul
     ])
 
 
-@app.callback(Output('spec_1', 'children'),[Input('model-dropdown', 'value')])
-def update_output_div1(input_value):
+@app.callback(Output('spec_1', 'children'),[Input('submit-button-state', 'n_clicks')],[State('model-dropdown', 'value')])
+def update_output_div1(n_clicks,input_value):
     if input_value==None:
         return None
     return input_value
-@app.callback(Output('spec_2', 'children'),[Input('model-dropdown2', 'value')])
-def update_output_div2(input_value):
+@app.callback(Output('spec_2', 'children'),[Input('submit-button-state', 'n_clicks')],[State('model-dropdown2', 'value')])
+def update_output_div2(n_clicks,input_value):
     if input_value==None:
         return None
     return input_value
 
 
-@app.callback(Output('nozle_1', 'children'),[Input('model-dropdown', 'value')])
-def update_nozle_div1(input_value):
+@app.callback(Output('nozle_1', 'children'),[Input('submit-button-state', 'n_clicks')],[State('model-dropdown', 'value')])
+def update_nozle_div1(n_clicks,input_value):
+    print(input_value)
     if input_value==None:
         return None
     else:
@@ -304,8 +335,8 @@ def update_nozle_div1(input_value):
         if input_value=='94k100hp':
             return '1.02'        
     
-@app.callback(Output('nozle_2', 'children'),[Input('model-dropdown2', 'value')])
-def update_nozle_div2(input_value):
+@app.callback(Output('nozle_2', 'children'),[Input('submit-button-state', 'n_clicks')],[State('model-dropdown2', 'value')])
+def update_nozle_div2(n_clicks,input_value):
     if input_value==None:
         return None
     else:
@@ -316,6 +347,80 @@ def update_nozle_div2(input_value):
         if input_value=='94k100hp':
             return '1.02'      
 
+
+        
+@app.callback(Output('op_1', 'children'),[Input('submit-button-state', 'n_clicks')],[State('model-dropdown', 'value')])
+def update_op_div1(n_clicks,input_value):
+    if input_value==None:
+        return None
+    else:
+        if input_value=='60k50hp':
+            return '0.33'
+        elif input_value=='94k50hp':
+            return '0.25'
+        if input_value=='94k100hp':
+            return '0.38'        
+    
+@app.callback(Output('op_2', 'children'),[Input('submit-button-state', 'n_clicks')],[State('model-dropdown2', 'value')])
+def update_op_div2(n_clicks,input_value):
+    if input_value==None:
+        return None
+    else:
+        if input_value=='60k50hp':
+            return '0.33'
+        elif input_value=='94k50hp':
+            return '0.25'
+        if input_value=='94k100hp':
+            return '0.38'  
+        
+@app.callback(Output('psi_1', 'children'),[Input('submit-button-state', 'n_clicks')],[State('model-dropdown', 'value')])
+def update_psi_div1(n_clicks,input_value):
+    if input_value==None:
+        return None
+    else:
+        if input_value=='60k50hp':
+            return '55,000'
+        elif input_value=='94k50hp':
+            return '87,000'
+        if input_value=='94k100hp':
+            return '87,000'        
+    
+@app.callback(Output('psi_2', 'children'),[Input('submit-button-state', 'n_clicks')],[State('model-dropdown2', 'value')])
+def update_psi_div2(n_clicks,input_value):
+    if input_value==None:
+        return None
+    else:
+        if input_value=='60k50hp':
+            return '55,000'
+        elif input_value=='94k50hp':
+            return '87,000'
+        if input_value=='94k100hp':
+            return '87,000'    
+        
+ 
+@app.callback(Output('gmin_1', 'children'),[Input('submit-button-state', 'n_clicks')],[State('model-dropdown', 'value')])
+def update_gmin_div1(n_clicks,input_value):
+    if input_value==None:
+        return None
+    else:
+        if input_value=='60k50hp':
+            return '400'
+        elif input_value=='94k50hp':
+            return '400'
+        if input_value=='94k100hp':
+            return '500'        
+    
+@app.callback(Output('gmin_2', 'children'),[Input('submit-button-state', 'n_clicks')],[State('model-dropdown2', 'value')])
+def update_gmin_div2(n_clicks,input_value):
+    if input_value==None:
+        return None
+    else:
+        if input_value=='60k50hp':
+            return '400'
+        elif input_value=='94k50hp':
+            return '400'
+        if input_value=='94k100hp':
+            return '500'        
 
 @app.callback(Output('thick-dropdown', 'options'),
               [Input('sojae-dropdown', 'value')])
