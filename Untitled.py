@@ -16,6 +16,7 @@ import chart_studio.plotly as py
 import chart_studio
 import os
 import dash_table
+import dash_auth
 
 import plotly.figure_factory as FF
 #plotly.offline doesn't push your charts to the clouds
@@ -149,7 +150,10 @@ def to_str(x):
 app = dash.Dash()
 
 
-
+USERNAME_PASSWORD_PAIRS = [
+    ['JamesBond', '007'],['Hanmool','0910']
+]
+auth = dash_auth.BasicAuth(app,USERNAME_PASSWORD_PAIRS)
 
 
 
