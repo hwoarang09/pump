@@ -16,7 +16,6 @@ import chart_studio.plotly as py
 import chart_studio
 import os
 import dash_table
-import dash_auth
 
 import plotly.figure_factory as FF
 #plotly.offline doesn't push your charts to the clouds
@@ -144,17 +143,18 @@ def to_str(x):
     return x    
 
 
-# In[11]:
+# In[19]:
 
 
-app = dash.Dash()
+import dash_auth
 
+app = dash.Dash(title="Feed Calculator")
+app._favicon = ("flowsymbol.png")
 
 USERNAME_PASSWORD_PAIRS = [
     ['JamesBond', '007'],['Hanmool','0910']
 ]
 auth = dash_auth.BasicAuth(app,USERNAME_PASSWORD_PAIRS)
-
 
 
 df_start=output('60k50hp',10,'Ceramic').to_dict()
@@ -478,7 +478,13 @@ if __name__ == '__main__':
     app.run_server(host='0.0.0.0',port=5050)
 
 
-# In[12]:
+# In[15]:
+
+
+
+
+# In[ ]:
+
 
 
 
