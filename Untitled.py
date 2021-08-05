@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[29]:
 
 
 import pandas as pd
@@ -30,7 +30,7 @@ import pandas as pd
 from pandas import DataFrame
 
 
-# In[4]:
+# In[30]:
 
 
 
@@ -71,22 +71,22 @@ def output(model,thick,columns):
     return df[(df.Thick==(thick))][['Quality',columns]]
 
 
-# In[5]:
+# In[31]:
 
 
 
 sojae_list1=['AL5052', 'Bronze',
-       'CarbonFiber', 'Glass', 'Inconel600', 'Invar',
-       'MildSteel_nA36', 'Plexiglass', 'Rubber',
-       'SteelAR400', 'StainlessSteel304', 'StainlessSteel',
-       'Ti', 'TungstenCarbide']
+           'CarbonFiber', 'Glass', 'Inconel600', 'Invar',
+           'MildSteel A36', 'Plexiglass 아크릴', 'Rubber',
+           'Steel AR400', 'Stainless Steel 304', 'Stainless Steel 316L',
+           'Ti', 'Tungsten Carbide']
 sojae_list2=['Ceramic', 'Marble', 'Quartz']
 sojae_list=sojae_list1+sojae_list2
 op_start=[{'label' : a, 'value': a} for a in sojae_list ]
 op_start
 
 
-# In[6]:
+# In[32]:
 
 
 
@@ -97,13 +97,13 @@ thick_dic2=[{'label' : str(a)+'mm','value': str(a)} for a in thick_list2]
 thick_dic1
 
 
-# In[7]:
+# In[33]:
 
 
 thick_dic1
 
 
-# In[8]:
+# In[34]:
 
 
 thick_dic3=[
@@ -117,7 +117,7 @@ thick_dic3=[
 thick_dic3
 
 
-# In[9]:
+# In[35]:
 
 
 model_list=['60k50hp','94k50hp','94k100hp']
@@ -126,7 +126,7 @@ model_dic=[{'label' : model_label_list[a], 'value':model_list[a] } for a in rang
 model_dic
 
 
-# In[10]:
+# In[36]:
 
 
 def delete_comma(x):
@@ -143,12 +143,15 @@ def to_str(x):
     return x    
 
 
-# In[19]:
+# In[37]:
 
 
 import dash_auth
 
+external_stylesheets=r"C:\Users\hwoar\OneDrive\바탕 화면\sw_train\freelance\0727 pump\pump\pump\assets\css1.css"
+
 app = dash.Dash(title="Feed Calculator")
+app.css.config.serve_locally = True
 app._favicon = ("flowsymbol.png")
 
 USERNAME_PASSWORD_PAIRS = [
@@ -299,11 +302,11 @@ def update_nozle_div1(n_clicks,input_value):
         return None
     else:
         if input_value=='60k50hp':
-            return '1.02'
+            return '1.02mm'
         elif input_value=='94k50hp':
-            return '0.89'
+            return '0.89mm'
         if input_value=='94k100hp':
-            return '1.02'        
+            return '1.02mm'        
     
 @app.callback(Output('nozle_2', 'children'),[Input('submit-button-state', 'n_clicks')],[State('model-dropdown2', 'value')])
 def update_nozle_div2(n_clicks,input_value):
@@ -311,11 +314,11 @@ def update_nozle_div2(n_clicks,input_value):
         return None
     else:
         if input_value=='60k50hp':
-            return '1.02'
+            return '1.02mm'
         elif input_value=='94k50hp':
-            return '0.89'
+            return '0.89mm'
         if input_value=='94k100hp':
-            return '1.02'      
+            return '1.02mm'      
 
 
         
@@ -325,11 +328,11 @@ def update_op_div1(n_clicks,input_value):
         return None
     else:
         if input_value=='60k50hp':
-            return '0.33'
+            return '0.33mm'
         elif input_value=='94k50hp':
-            return '0.25'
+            return '0.25mm'
         if input_value=='94k100hp':
-            return '0.38'        
+            return '0.38mm'        
     
 @app.callback(Output('op_2', 'children'),[Input('submit-button-state', 'n_clicks')],[State('model-dropdown2', 'value')])
 def update_op_div2(n_clicks,input_value):
@@ -337,11 +340,11 @@ def update_op_div2(n_clicks,input_value):
         return None
     else:
         if input_value=='60k50hp':
-            return '0.33'
+            return '0.33mm'
         elif input_value=='94k50hp':
-            return '0.25'
+            return '0.25,,'
         if input_value=='94k100hp':
-            return '0.38'  
+            return '0.38mm'  
         
 @app.callback(Output('psi_1', 'children'),[Input('submit-button-state', 'n_clicks')],[State('model-dropdown', 'value')])
 def update_psi_div1(n_clicks,input_value):
@@ -349,11 +352,11 @@ def update_psi_div1(n_clicks,input_value):
         return None
     else:
         if input_value=='60k50hp':
-            return '55,000'
+            return '55,000psi'
         elif input_value=='94k50hp':
-            return '87,000'
+            return '87,000psi'
         if input_value=='94k100hp':
-            return '87,000'        
+            return '87,000psi'        
     
 @app.callback(Output('psi_2', 'children'),[Input('submit-button-state', 'n_clicks')],[State('model-dropdown2', 'value')])
 def update_psi_div2(n_clicks,input_value):
@@ -361,11 +364,11 @@ def update_psi_div2(n_clicks,input_value):
         return None
     else:
         if input_value=='60k50hp':
-            return '55,000'
+            return '55,000psi'
         elif input_value=='94k50hp':
-            return '87,000'
+            return '87,000psi'
         if input_value=='94k100hp':
-            return '87,000'    
+            return '87,000psi'    
         
  
 @app.callback(Output('gmin_1', 'children'),[Input('submit-button-state', 'n_clicks')],[State('model-dropdown', 'value')])
@@ -374,11 +377,11 @@ def update_gmin_div1(n_clicks,input_value):
         return None
     else:
         if input_value=='60k50hp':
-            return '400'
+            return '400m/min'
         elif input_value=='94k50hp':
-            return '400'
+            return '400m/min'
         if input_value=='94k100hp':
-            return '500'        
+            return '500m/min'        
     
 @app.callback(Output('gmin_2', 'children'),[Input('submit-button-state', 'n_clicks')],[State('model-dropdown2', 'value')])
 def update_gmin_div2(n_clicks,input_value):
@@ -386,11 +389,11 @@ def update_gmin_div2(n_clicks,input_value):
         return None
     else:
         if input_value=='60k50hp':
-            return '400'
+            return '400m/min'
         elif input_value=='94k50hp':
-            return '400'
+            return '400m/min'
         if input_value=='94k100hp':
-            return '500'        
+            return '500m/min'        
 
 @app.callback(Output('thick-dropdown', 'options'),
               [Input('sojae-dropdown', 'value')])
@@ -429,7 +432,7 @@ def update_output(n_clicks, sojae, thick,model1,model2):
             list3=[0,0,0,0,0]
         else:
             list3=round((df3.iloc[:,2]-df3.iloc[:,1])/df3.iloc[:,1]*100,2)
-        df3['speed %']=list3
+        df3['speed']=list3
         df3.iloc[:,1]=df3.iloc[:,1].apply(to_str)
         df3.iloc[:,2]=df3.iloc[:,2].apply(to_str)
         print(df3)        
@@ -476,15 +479,4 @@ chart_studio.tools.set_credentials_file(username=username, api_key=api_key)
 
 if __name__ == '__main__':
     app.run_server(host='0.0.0.0',port=5050)
-
-
-# In[15]:
-
-
-
-
-# In[ ]:
-
-
-
 
