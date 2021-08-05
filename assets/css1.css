@@ -1,10 +1,12 @@
 @font-face {
-font-family: “BMJUA”;
-src: url(“fonts/BMJUA_ttf.ttf”) format(“truetype”);
+    font-family: 'SF_HambakSnow';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2106@1.1/SF_HambakSnow.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
 }
 
-*{
-  font-family: 맑은고딕, Malgun Gothic, dotum, gulim, sans-serif;
+body {
+  font-family: KoPub Dotum;
 
 
 
