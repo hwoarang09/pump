@@ -143,14 +143,14 @@ def to_str(x):
     return x    
 
 
-# In[37]:
+# In[ ]:
 
 
 import dash_auth
 
-external_stylesheets=r"C:\Users\hwoar\OneDrive\바탕 화면\sw_train\freelance\0727 pump\pump\pump\assets\css1.css"
+external_stylesheets=['http://cdn.jsdelivr.net/npm/font-kopub@1.0/kopubdotum.min.css']
 
-app = dash.Dash(title="Feed Calculator")
+app = dash.Dash(title="Feed Calculator",external_stylesheets=external_stylesheets)
 app.css.config.serve_locally = True
 app._favicon = ("flowsymbol.png")
 
@@ -479,4 +479,10 @@ chart_studio.tools.set_credentials_file(username=username, api_key=api_key)
 
 if __name__ == '__main__':
     app.run_server(host='0.0.0.0',port=5050)
+
+
+# In[ ]:
+
+
+
 
